@@ -4,9 +4,9 @@
     {
         public string Url { get; }
 
-        public UrlsModel(string filepath)
+        public UrlsModel(string imagepath)
         {
-            Url = filepath;
+            Url = imagepath;
         }
     }
 }

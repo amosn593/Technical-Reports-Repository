@@ -6,7 +6,10 @@ namespace DOMAIN.IConfiguration
 {
     public interface IUnitOfWork : IDisposable
     {
-     
+
+        ICategoryRepo Category { get; }
+
+        IBookRepo Book { get; }
 
         IReportRepo Report { get; }
 

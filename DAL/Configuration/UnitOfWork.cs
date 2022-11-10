@@ -24,6 +24,10 @@ namespace DAL.Configuration
 
         public IDepartmentRepo Department => new DepartmentRepo(_context);
 
+        public ICategoryRepo Category => new CategoryRepo(_context);
+
+        public IBookRepo Book => new BookRepo(_context);
+
         public async Task Save()
         {
             await _context.SaveChangesAsync();

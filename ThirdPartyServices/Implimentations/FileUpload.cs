@@ -17,13 +17,13 @@ namespace AzureBlobStorage.Implimentations
         
         public BlobServiceClient BlobServiceClient { get; }
 
-        public async Task<UrlsModel> PdfUpload(IFormFile file)
+        public async Task<UrlsModel> ImageUpload(IFormFile file)
         {
-            var ConteType = new String[] { "application/pdf" };
+            var ConteType = new String[] { "application/png", "application/jpg", "application/jpeg" };
 
             if(!ConteType.Contains(file.ContentType))
             {
-                throw new InvalidDataException("Only Pdf files allowed");
+                throw new InvalidDataException("Only Image files allowed");
             }
           
             try
@@ -36,13 +36,13 @@ namespace AzureBlobStorage.Implimentations
                  await blobclient.UploadAsync(file.OpenReadStream(),
                     new BlobHttpHeaders {ContentType = file.ContentType});
 
-                var filepath = blobclient.Uri.ToString();
+                var imagepath = blobclient.Uri.ToString();
 
-                return new UrlsModel(filepath);
+                return new UrlsModel(imagepath);
             }
             catch (Exception)
             {
-                throw new Exception("Some went wrong while upload file to Azure Blob Storage");
+                throw new Exception("Some went wrong while uploading image to Azure Blob Storage");
             }
             
         }

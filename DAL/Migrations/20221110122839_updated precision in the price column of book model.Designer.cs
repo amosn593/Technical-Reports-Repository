@@ -4,6 +4,7 @@ using DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ReportsDbContext))]
-    partial class PoultryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221110122839_updated precision in the price column of book model")]
+    partial class updatedprecisioninthepricecolumnofbookmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,7 +158,7 @@ namespace DAL.Migrations
             modelBuilder.Entity("DOMAIN.Models.Book", b =>
                 {
                     b.HasOne("DOMAIN.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Books")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -173,6 +175,11 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Directorate");
+                });
+
+            modelBuilder.Entity("DOMAIN.Models.Category", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

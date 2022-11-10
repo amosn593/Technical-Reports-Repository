@@ -4,6 +4,6 @@ namespace AzureBlobStorage.Models
 {
     public class FileModel
     {
-        public IFormFile PdfFile { get; set; }
+        public IFormFile ImageFile { get; set; }
     }
 }

@@ -5,6 +5,6 @@ namespace AzureBlobStorage.Interfaces
 {
     public interface IFileUpload
     {
-        Task<UrlsModel> PdfUpload(IFormFile file);
+        Task<UrlsModel> ImageUpload(IFormFile image);
     }
 }

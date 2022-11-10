@@ -9,6 +9,8 @@ namespace DAL.Data
         {
         }
 
+        public DbSet<DOMAIN.Models.Category> Categories { get; set; }
+        public DbSet<DOMAIN.Models.Book> Books { get; set; }
         public DbSet<DOMAIN.Models.Report> Reports { get; set; }
         public DbSet<DOMAIN.Models.Directorate> Directorates { get; set; }
         public DbSet<DOMAIN.Models.Department> Departments { get; set; }

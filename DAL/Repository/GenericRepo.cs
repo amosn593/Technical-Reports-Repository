@@ -1,8 +1,5 @@
-﻿
-
-using DAL.Data;
+﻿using DAL.Data;
 using DOMAIN.IRepository;
-using DOMAIN.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repository

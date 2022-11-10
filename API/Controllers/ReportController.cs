@@ -88,7 +88,7 @@ namespace API.Controllers
                 //Upload the file to the azure blob storage
                 var report = _mapper.Map<Report>(reportcreatedto);
 
-                var fileupload = await _ifileupload.PdfUpload(reportcreatedto.PdfFile);
+                var fileupload = await _ifileupload.ImageUpload(reportcreatedto.PdfFile);
 
                
 
@@ -122,7 +122,7 @@ namespace API.Controllers
                 //Upload the file to the azure blob storage
                 var report = _mapper.Map<Report>(reportupdateDTO);
 
-                var fileupload = await _ifileupload.PdfUpload(reportupdateDTO.PdfFile);
+                var fileupload = await _ifileupload.ImageUpload(reportupdateDTO.PdfFile);
 
                 var directorate = await _uow.Directorate.FindById(reportupdateDTO.DirectorateId);
 
