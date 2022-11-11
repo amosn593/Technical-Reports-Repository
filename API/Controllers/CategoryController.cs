@@ -25,7 +25,7 @@ namespace API.Controllers
 
 
         // GET: api/<CategoryController>
-        [HttpGet("Getting all Categories")]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
@@ -104,14 +104,61 @@ namespace API.Controllers
 
         // PUT api/<CategoryController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] CategoryDTO categorydto)
         {
+            if(id != categorydto.CategoryId || !ModelState.IsValid)
+            {
+                _logger.LogError($"Error while Updating category on CategoryController Put Method at {DateTime.Now} ");
+                return BadRequest();
+            }
+            try
+            {
+                _logger.LogInformation($"Updating category on CategoryController Update Method at {DateTime.Now}");
+                categorydto.Name.ToLower();
+
+                var category = _mapper.Map<Category>(categorydto);
+
+                _unitOfWork.Category.Update(category);
+
+                await _unitOfWork.Save();
+
+                return NoContent();
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Error while Updating category on CategoryController Put Method at {DateTime.Now} with Error {ex} ");
+                return BadRequest(ex.Message);
+
+            }
         }
 
         // DELETE api/<CategoryController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                _logger.LogInformation($"Deleting category on CategoryController Delete Method at {DateTime.Now}");
+
+                var category = await _unitOfWork.Category.FindById(id);
+
+                if ( category == null)
+                {
+                    return BadRequest();
+                }
+
+                _unitOfWork.Category.Delete(category);
+
+                await _unitOfWork.Save();
+
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Error while Deleting category on CategoryController Delete Method at {DateTime.Now} with Error {ex} ");
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

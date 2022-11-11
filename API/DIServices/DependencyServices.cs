@@ -19,7 +19,7 @@ namespace API.DIServices
             });
             services.AddCors(options =>
             {
-                options.AddPolicy("reportfrontend",
+                options.AddPolicy("react",
                     policy =>
                     {
                         policy.WithOrigins("http://localhost:3000")

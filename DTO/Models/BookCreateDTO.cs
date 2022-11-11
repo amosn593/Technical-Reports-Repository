@@ -19,9 +19,7 @@ namespace DTO.Models
         [Required]
         [Column(TypeName = "varchar(400)")]
         public IFormFile ImageFile { get; set; }
-        [Required]
-        [Precision(3)]
-        public DateTime PostDate { get; set; }
+        
         [Required]
         public int CategoryId { get; set; }
     }

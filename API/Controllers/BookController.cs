@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using AzureBlobStorage.Interfaces;
 using DOMAIN.IConfiguration;
 using DOMAIN.Models;
 using DTO.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,12 +25,12 @@ namespace API.Controllers
             _logger = logger;
         }
         // GET: api/<BookController>
-        [HttpGet("Getting all books")]
+        [HttpGet]
         public async Task<IActionResult>  Get()
         {
             try
             {
-                _logger.LogInformation($"Getting Books on BookController at {DateTime.Now}");
+                _logger.LogInformation($"Getting Books on BookController on Get method at {DateTime.Now}");
                 var books = await _unitOfWork.Book.FindAll();
 
                 _logger.LogInformation($"Tranfering Books on BookController to BooksDTO at {DateTime.Now}");
@@ -44,34 +46,122 @@ namespace API.Controllers
             }
             catch (Exception Ex)
             {
-                _logger.LogError($"Something went wrong gettings Books on BookController at {DateTime.Now} with Error {Ex}");
+                _logger.LogError($"Something went wrong gettings Books on BookController on Get method at {DateTime.Now} with Error {Ex}");
                 return BadRequest();
             }
         }
 
         // GET api/<BookController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            try
+            {
+                _logger.LogInformation($"Gettin  Book by Id on BookController on Get Method at {DateTime.Now}");
+
+                var book = await _unitOfWork.Book.FindById(id);
+
+                var bookdto = _mapper.Map<BookDTO>(book);
+
+                return Ok(bookdto);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Something went wrong Getting Book By Id on BookController Get Method at {DateTime.Now} with Error {ex}");
+                return BadRequest();
+
+            }
+        }
+
+        // GET api/<BookController>/5
+        [HttpGet("GetByCategoryName/{CategoryName}")]
+        public async Task<IActionResult> GetBookByCategory(string categoryname)
+        {
+            try
+            {
+                _logger.LogInformation($"Getting Books by categoryname on BookController on GetBookByCategory Method at {DateTime.Now}");
+
+                var book = await _unitOfWork.Book.FindByCategory(categoryname);
+
+                //var bookdto = _mapper.Map<BookDTO>(book);
+
+                return Ok(book);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong Getting Book By categoryname on BookController GetBookByCategory Method at {DateTime.Now} with Error {ex}");
+                return BadRequest();
+
+            }
         }
 
         // POST api/<BookController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult>  Post([FromServices] IFileUpload _ifileupload, [FromForm] BookCreateDTO bookCreateDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _logger.LogInformation($"Posting Book on BookController on Post Method at {DateTime.Now}");
+
+                var book = _mapper.Map<Book>(bookCreateDTO);
+
+                var imageupload = await _ifileupload.ImageUpload(bookCreateDTO.ImageFile);
+
+                book.PostDate = DateTime.Now;
+
+                book.ImageUrl = imageupload.Url;
+
+                _unitOfWork.Book.Create(book);
+
+                await _unitOfWork.Save();
+
+                return CreatedAtAction(nameof(Get), new { id = book.BookId }, book);
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Something went wrong Posting Book on BookController Post Method at {DateTime.Now} with Error {ex}");
+                return BadRequest();
+            }
         }
 
         // PUT api/<BookController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromForm] string value)
         {
         }
 
         // DELETE api/<BookController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                _logger.LogInformation($"Deleting Book on BookController on Delete Method at {DateTime.Now}");
+
+                var book = await _unitOfWork.Book.FindById(id);
+
+                if( book == null)
+                {
+                    return BadRequest("Book with that Id not found!!!");
+                }
+
+                _unitOfWork.Book.Delete(book);
+
+                await _unitOfWork.Save();
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong Deleting Book By Id on BookController Delete Method at {DateTime.Now} with Error {ex}");
+                return BadRequest();
+            }
         }
     }
 }

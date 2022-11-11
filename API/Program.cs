@@ -36,7 +36,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseCors("reportfrontend");
+app.UseCors("react");
 
 app.UseAuthorization();
 

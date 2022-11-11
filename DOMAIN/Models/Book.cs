@@ -13,7 +13,7 @@ namespace DOMAIN.Models
         [Column(TypeName = "varchar(100)")]
         public string Title { get; set; }
         [Required]
-        [Precision(4, 2)]
+        [Precision(10, 2)]
         public decimal Price { get; set; }
         [Required]
         [Column(TypeName = "varchar(1000)")]
@@ -24,6 +24,8 @@ namespace DOMAIN.Models
         [Required]
         [Precision(3)]
         public DateTime PostDate { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
         [Required]
         public Category Category { get; set; }
     }

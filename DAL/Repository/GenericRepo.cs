@@ -29,7 +29,6 @@ namespace DAL.Repository
                 throw;
             }
         }
-
         public virtual async Task<T> FindById(int id)
         {
             
@@ -37,12 +36,7 @@ namespace DAL.Repository
             {
                 var report = await _context.Set<T>().FindAsync(id);
 
-                if(report == null)
-                {
-                    throw new NullReferenceException("Object with that Id not found.");
-                }
-
-                
+                              
                 return report;
 
             }

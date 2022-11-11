@@ -19,7 +19,7 @@ namespace AzureBlobStorage.Implimentations
 
         public async Task<UrlsModel> ImageUpload(IFormFile file)
         {
-            var ConteType = new String[] { "application/png", "application/jpg", "application/jpeg" };
+            var ConteType = new String[] { "image/png", "image/jpg", "image/jpeg" };
 
             if(!ConteType.Contains(file.ContentType))
             {
@@ -29,7 +29,7 @@ namespace AzureBlobStorage.Implimentations
             try
             {
                
-                var blobcontainer = _blobServiceClient.GetBlobContainerClient("reports");
+                var blobcontainer = _blobServiceClient.GetBlobContainerClient("bookstore");
 
                 var blobclient = blobcontainer.GetBlobClient(file.FileName.Replace(' ', '-').ToLower());
 
